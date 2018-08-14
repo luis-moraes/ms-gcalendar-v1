@@ -9,7 +9,7 @@ var Calendar = mongoose.model('Calendar', {
   },
   google_address: {
     type: String,
-    required: true,
+    required: false,
     minlength: 1,
     trim: true
   }
