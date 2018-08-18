@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "sinaxys-212519",
+    "private_key_id": "2128d0c2ba8ba8984013006a928e84b57f6e466f",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCxaRlL5o/XayOW\nRjavk4whk+0nzJlnkeU4NCKitr4V+v9AwVE/GlxXwFw1aZQR6LU2b9HRdAtTI5S5\nlddtIqzh4MQmzPXcRiRgM1n4ikjwd8z51pbYMRwo1rB1hdN13b8uoaiz6D4ZgSe7\neVM/uLUQ0Nkc1WONeGEXpbqF+4EV+Nf+vRnXZMdXpQzfBu8ZWdFJJ6HQbU2b7oLj\n91Jah1WWTrbjogs4pUxqgwScQH+oFwHJil0hH1Gc151HFBjTGwptkReN9ghGBGC6\nGxmDVXkIVqQyszXF1zXg/DQR8DIMy1bmGCYf/RHGXISWahUT/IdxxQ0g+dPlj7HS\nMNkZp3L1AgMBAAECggEAA97ZuQjLSi7bNICzQFQri+JkG48tXALlCYhE2fnuRO2x\n7e68+aLdZHvprXyjlcE9Wtx7qy8pJBcA1dlJo7Oy9xNmFCNtzCPeA7J7G9IG7CaH\nWuTUntwLbW5DPha9jOYml25z2/qM7q+DqpjOBfQSRAJA1yeZdJ4T62X0bAHkFUX/\ncMInPFckNWivCHvVajV3d942G+ERsHJfApw+0noIy+TBrICVte+SzyM5FjlKY/8a\np+TRrpoNjt/pIlBDD0HJbdilckpKIg7y5Con5ZLQQ0TNn1rf5eAoFKdEMpoxgt3e\nd74wOuzVtYEVO6Arhc21b+QRz8RrlW87olhIufivIQKBgQDi4+o9MUkaVtaqAzje\nC4e12wtkJboIrVJfWQxScGcAwObVHueICBzaHdrEJGkfwTBY+Zxwwbh08MmH8yfx\niR4gsu1S++IolI+RfCWoYUiYuJXu5fMYqpTZYIO5knydvGz2+asQ3ewfAZyqEeiC\nCQ2W98pJOTwYz98SoaFi4syxOQKBgQDILAyNNRAC2MFFwGYhcm4UB4CwmR80MDzE\ny3jVh8i6ncRGhmj4+vKF8FXZuSAi5z39G4JbV3a7j8Dgimy/x3SAFgLldHBmj1nt\nA9T834hpVrAcuWn7q2rVZFWFA3IgbLKAlFNOI3k39n1nKB4tYpayvdGjT/CyMbm9\nqtPhYZvbnQKBgQDC8j1zMoOzQ+XR0k7sSk/iq0CQXfIIPpPGJQb3VmjKNvSfLZyW\nPxI7PueXHAnPJPjbmi0WnPxWTgV68Cvj1oKyacqMQKxDXdI1mMvqbxwnTIJW7/D9\nwqN+WvUTX4//H8UoN8EKDwQwZ/wqDJUQFaM9kc6XN7wxPXpX0dSO2Hwz0QKBgAvA\nAjCbx8fS/21fwN7/v5RvaE91fY5rsnV+2CX4pYDG2AmnxCuxV2EjXXa9VjSWTF46\nKinAdZjG9HR5y65qP91w7VSYxCxRB99Q1UTOvkwoqYfWHnGGe2vxSs/XBvD+UHAZ\nxNYWYPw2/N98TGEvo1b0q4ShoahkINoQWAWn3CVFAoGBANYvj/LBsSTyhxre0fS6\n/uYPXgdL4EWyJ0E8VOlpVlyoEXLeorowKAHJYnVMCs0E7xDvCBS7qp+9ChN+6ECO\n6ZSPqHLhf8BWjcWCW/CzzBFgI1+Ag0zSPfrjOerRSa0ZDR4f9xMJpkXYvC0Zgeec\n3wmqARtqzFUaaDZXRvISPpD3\n-----END PRIVATE KEY-----\n",
+    "client_email": "sinaxys-gcalendar@sinaxys-212519.iam.gserviceaccount.com",
+    "client_id": "108437036720690072813",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sinaxys-gcalendar%40sinaxys-212519.iam.gserviceaccount.com"
+  }
+  

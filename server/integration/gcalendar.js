@@ -1,12 +1,73 @@
-const {Compute} = require('google-auth-library');
+const CONFIG = require('./../config/settings');
+const {Calendar} = require('./../models/calendar');
 
-async function main() {
-  const client = new Compute({
+const CalendarAPI = require('node-google-calendar');
+let cal = new CalendarAPI(CONFIG); 
+const userId = CONFIG.userId;
+
+function createCalendar(title) {
+  let params = { summary: title };
+  return cal.Calendars.insert(params).then(resp => {
+    console.log(resp);
+    return resp;
+  }).catch(err => {
+    console.log(err.message);
   });
-  const projectId = 'sinaxys-212519';
-  const url = `https://www.googleapis.com/dns/v1/projects/${project_id}`;
-  const res = await client.request({url});
-  console.log(res.data);
+}
+function grantUserOwnerPermissionToCalendar(calendarId, userId) {
+  let params = {
+    scope: {
+      type: 'user',
+      value: userId
+    },
+    role: 'writer'
+  };
+  let optionalQueryParams = {
+    sendNotifications: true
+  };
+  return cal.Acl.insert(calendarId, params, undefined)
+    .then(resp => {
+      console.log(resp);
+      return resp;
+    }).catch(err => {
+      console.log(err.message);
+    });
 }
 
-main().catch(console.error);
+function getExistingCalendarInCalendarList(calendarId) {
+  return cal.CalendarList.get(calendarId)
+    .then(resp => {
+      console.log(resp);
+      return resp;
+    }).catch(err => {
+      console.log(err.message);
+    });
+}
+
+function createNewCalendarAndGrantAccess(calendar) {
+  // 1. create a new calendar thru service account
+  // 2. grant your google account owner permission of calendar
+  // 3. check that it appears on your calendarList (and on the left of your google calendar WebUI)
+  // 4. (optional) tear down by deleting created calendar with its id
+  return createCalendar(calendar.clinicName).then(newCal => {
+    console.log(`Created calendar: ${newCal.id}`);
+
+    grantUserOwnerPermissionToCalendar(newCal.id, CONFIG.userId).then(aclRuleCreated => {
+      console.log(aclRuleCreated);
+    });
+
+    grantUserOwnerPermissionToCalendar(newCal.id, calendar.ownerEmail).then(aclRuleCreated => {
+      console.log(aclRuleCreated);
+      
+    
+    });
+
+    return newCal.id;
+  });
+}
+
+
+
+module.exports.createNewCalendar = createNewCalendarAndGrantAccess;
+
+

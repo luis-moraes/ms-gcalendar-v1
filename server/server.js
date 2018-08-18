@@ -7,6 +7,8 @@ const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {Calendar} = require('./models/calendar');
+const gcal = require('./integration/gcalendar');
+
 
 
 
@@ -17,15 +19,23 @@ app.use(bodyParser.json());
 
 app.post('/calendar', (req, res) => {
   var calendar = new Calendar({
-    clinic: req.body.clinic,
-    google_address: 'dfghjkdfghjkcvbnm'
+    clinicName: req.body.clinicName,
+    ownerEmail: req.body.ownerEmail
   });
 
-  calendar.save().then((doc) => {
-    res.send(doc);
-  }, (e) => {
-    res.status(400).send(e);
+  gcal.createNewCalendar(calendar).then((calId) => {
+    calendar.gcalId = calId;
+
+    calendar.save().then((doc) => {
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
+    });
+
+
   });
+
+  
 });
 
 

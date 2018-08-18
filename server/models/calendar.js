@@ -1,13 +1,20 @@
 var mongoose = require('mongoose');
 
 var Calendar = mongoose.model('Calendar', {
-  clinic: {
+  clinicName: {
     type: String,
     required: true,
     minlength: 1,
     trim: true
   },
-  google_address: {
+  ownerEmail: {
+    type: String,
+    required: false,
+    minlength: 1,
+    trim: true
+  }
+  ,
+  gcalId: {
     type: String,
     required: false,
     minlength: 1,
