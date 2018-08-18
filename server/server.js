@@ -46,6 +46,33 @@ app.post('/calendar', (req, res) => {
   
 });
 
+app.post('/calendar/:clinicName/event', (req, res) => {
+  
+  var cName = req.params.clinicName;
+  var clientName = req.body.clientName;
+  var startDateTime = req.body.startDateTime;
+  var endDateTime = req.body.endDateTime;
+  var voucherCode = req.body.voucherCode;
+
+  if (!cName || !clientName || !startDateTime || !endDateTime) {
+    return res.status(404).send();
+  }
+
+  Calendar.findOne({'clinicName' : cName}).then((calendar) => {
+    var gcalId = calendar.gcalId;
+
+      gcal.insertEvent(gcalId,clientName,startDateTime,endDateTime,voucherCode).then(resp => {
+        res.status(201).send();
+
+      }).catch((e) => {
+        res.status(500).send();
+      });
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  
+});
+
 
 app.get('/calendar', (req, res) => {
   Calendar.find().then((calendars) => {

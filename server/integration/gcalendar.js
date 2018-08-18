@@ -5,7 +5,49 @@ const CalendarAPI = require('node-google-calendar');
 let cal = new CalendarAPI(CONFIG); 
 const userId = CONFIG.userId;
 
-const GCALENDAR_LINK = 'https://calendar.google.com/calendar/r?cid=';
+
+function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucherCode) {
+  var description;
+  if(voucherCode){
+    description = `Reserva Sinaxys - Cliente: ${clientName} ** Voucher: ${voucherCode} **`;
+  }else{
+    description = `Reserva Sinaxys - Cliente: ${clientName}.`;
+  }
+	let event = {
+		'start': {
+			'dateTime': startDateTime
+		},
+		'end': {
+			'dateTime': endDateTime
+		},
+		'summary': `Reserva Sinaxys - Cliente: ${clientName}`,
+		'description': description,
+		'colorId': 1
+	};
+	let optionalQueryParams = {
+		sendNotifications: true
+	};
+
+	return cal.Events.insert(calendarId, event, optionalQueryParams)
+		.then(resp => {
+			console.log(resp);
+			let results = {
+				id: resp.id,
+				'summary': resp.summary,
+				'location': resp.location,
+				'status': resp.status,
+				'start': resp.start.dateTime,
+				'end': resp.end.dateTime,
+				'created': new Date(resp.created)
+			};
+			console.log('inserted event:');
+			console.log(results);
+			return results;
+		})
+		.catch(err => {
+			console.log('Error: insertEvent', err.message);
+		});
+}
 
 function createCalendar(title) {
   let params = { summary: title };
@@ -93,5 +135,6 @@ function createNewCalendarAndGrantAccess(calendar) {
 
 
 module.exports.createNewCalendar = createNewCalendarAndGrantAccess;
+module.exports.insertEvent = insertEvent;
 
 
