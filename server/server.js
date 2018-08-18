@@ -14,10 +14,39 @@ const gcal = require('./integration/gcalendar');
 
 
 
+
 var app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.json());
+
+
+app.get('/calendar/:clinicName/event', (req, res) => {
+
+  
+  var cName = req.params.clinicName;
+  var startDateTime = req.query.startDateTime;
+  var endDateTime = req.query.endDateTime;
+
+  if (!cName  || !startDateTime || !endDateTime) {
+    return res.status(404).send();
+  }
+
+  Calendar.findOne({'clinicName' : cName}).then((calendar) => {
+    var gcalId = calendar.gcalId;
+
+      gcal.listSingleEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
+        res.send(resp);
+
+      }).catch((e) => {
+        res.status(500).send();
+      });
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  
+});
+
 
 app.get('/calendar/:clinicName', (req, res) => {
   

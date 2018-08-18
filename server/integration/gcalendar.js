@@ -5,6 +5,37 @@ const CalendarAPI = require('node-google-calendar');
 let cal = new CalendarAPI(CONFIG); 
 const userId = CONFIG.userId;
 
+function listSingleEventsWithinDateRange(calendarId, startDateTime, endDateTime) {
+	let eventsArray = [];
+	let params = {
+		timeMin: startDateTime,
+		timeMax: endDateTime,
+		q: '',
+		singleEvents: true,
+		orderBy: 'startTime'
+	}
+
+	return cal.Events.list(calendarId, params)
+		.then(json => {
+			for (let i = 0; i < json.length; i++) {
+				let event = {
+					id: json[i].id,
+					summary: json[i].summary,
+					location: json[i].location,
+					start: json[i].start,
+					end: json[i].end,
+					status: json[i].status
+				};
+				eventsArray.push(event);
+			}
+			console.log('List of events on calendar within time-range:');
+			console.log(eventsArray);
+			return eventsArray;
+		}).catch(err => {
+			console.log('Error: listSingleEventsWithinDateRange', err.message);
+		});
+}
+
 
 function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucherCode) {
   var description;
@@ -136,5 +167,6 @@ function createNewCalendarAndGrantAccess(calendar) {
 
 module.exports.createNewCalendar = createNewCalendarAndGrantAccess;
 module.exports.insertEvent = insertEvent;
+module.exports.listSingleEventsWithinDateRange = listSingleEventsWithinDateRange;
 
 
