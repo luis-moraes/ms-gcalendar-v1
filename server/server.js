@@ -12,6 +12,8 @@ const gcal = require('./integration/gcalendar');
 
 
 
+
+
 var app = express();
 const port = process.env.PORT;
 
@@ -26,8 +28,14 @@ app.post('/calendar', (req, res) => {
   gcal.createNewCalendar(calendar).then((calId) => {
     calendar.gcalId = calId;
 
+  
     calendar.save().then((doc) => {
-      res.send(doc);
+      var resp = {
+        gcalendarOwnerLink : `https://calendar.google.com/calendar/r?cid=${calId}`,
+        gcalendarPublicLink : `https://calendar.google.com/calendar/embed?src=${calId}&ctz=America%2FSao_Paulo`
+      }
+
+      res.send(resp);
     }, (e) => {
       res.status(400).send(e);
     });
