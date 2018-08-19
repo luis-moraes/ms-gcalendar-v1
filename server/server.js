@@ -20,19 +20,49 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
-
-app.get('/calendar/:clinicName/event', (req, res) => {
+app.delete('/calendar/:clinicId/event', (req, res) => {
 
   
-  var cName = req.params.clinicName;
+  var clinicId = req.params.clinicId;
   var startDateTime = req.query.startDateTime;
   var endDateTime = req.query.endDateTime;
 
-  if (!cName  || !startDateTime || !endDateTime) {
+  if (!clinicId  || !startDateTime || !endDateTime) {
     return res.status(404).send();
   }
 
-  Calendar.findOne({'clinicName' : cName}).then((calendar) => {
+  Calendar.findOne({'clinicId' : clinicId}).then((calendar) => {
+    var gcalId = calendar.gcalId;
+
+      gcal.deleteEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
+        if(resp){
+          res.status(200).send();
+        }else{
+          res.status(400).send();
+        }
+
+      }).catch((e) => {
+        res.status(500).send();
+      });
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  
+});
+
+
+app.get('/calendar/:clinicId/event', (req, res) => {
+
+  
+  var clinicId = req.params.clinicId;
+  var startDateTime = req.query.startDateTime;
+  var endDateTime = req.query.endDateTime;
+
+  if (!clinicId  || !startDateTime || !endDateTime) {
+    return res.status(404).send();
+  }
+
+  Calendar.findOne({'clinicId' : clinicId}).then((calendar) => {
     var gcalId = calendar.gcalId;
 
       gcal.listSingleEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
@@ -48,16 +78,16 @@ app.get('/calendar/:clinicName/event', (req, res) => {
 });
 
 
-app.get('/calendar/:clinicName', (req, res) => {
+app.get('/calendar/:clinicId', (req, res) => {
   
-  var cName = req.params.clinicName;
+  var cId = req.params.clinicId;
   
 
-  if (!cName) {
+  if (!cId) {
     return res.status(404).send();
   }
 
-  Calendar.findOne({'clinicName' : cName}).then((calendar) => {
+  Calendar.findOne({'clinicId' : cId}).then((calendar) => {
     var calId = calendar.gcalId;
 
     var resp = {
@@ -76,6 +106,7 @@ app.get('/calendar/:clinicName', (req, res) => {
 app.post('/calendar', (req, res) => {
   var calendar = new Calendar({
     clinicName: req.body.clinicName,
+    clinicId: req.body.clinicId,
     ownerEmail: req.body.ownerEmail
   });
 
@@ -100,19 +131,19 @@ app.post('/calendar', (req, res) => {
   
 });
 
-app.post('/calendar/:clinicName/event', (req, res) => {
+app.post('/calendar/:clinicId/event', (req, res) => {
   
-  var cName = req.params.clinicName;
+  var cId = req.params.clinicId;
   var clientName = req.body.clientName;
   var startDateTime = req.body.startDateTime;
   var endDateTime = req.body.endDateTime;
   var voucherCode = req.body.voucherCode;
 
-  if (!cName || !clientName || !startDateTime || !endDateTime) {
+  if (!cId  || !clientName || !startDateTime || !endDateTime) {
     return res.status(404).send();
   }
 
-  Calendar.findOne({'clinicName' : cName}).then((calendar) => {
+  Calendar.findOne({'clinicId' : cId}).then((calendar) => {
     var gcalId = calendar.gcalId;
 
       gcal.insertEvent(gcalId,clientName,startDateTime,endDateTime,voucherCode).then(resp => {

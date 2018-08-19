@@ -5,6 +5,42 @@ const CalendarAPI = require('node-google-calendar');
 let cal = new CalendarAPI(CONFIG); 
 const userId = CONFIG.userId;
 
+
+function deleteEventsWithinDateRange(calendarId, startDateTime, endDateTime) {
+  let eventsArray = [];
+    listSingleEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
+      if(resp){
+        for (let i = 0; i < resp.length; i++) {
+          deleteEvent(calendarId,resp[i].id);
+        }
+        return true;
+      }
+      
+
+  }).catch((e) => {
+    console.log(e);
+    return false;
+  });
+  return false;
+}
+
+
+
+function deleteEvent(calendarId, eventId) {
+	let params = {
+		sendNotifications: true
+	};
+	return cal.Events.delete(calendarId, eventId, params)
+		.then(resp => {
+			console.log('Deleted Event Response: ');
+			console.log(resp);
+			return resp;
+		})
+		.catch(err => {
+			console.log('Error: deleteEvent', JSON.parse(err.message));
+		});
+}
+
 function listSingleEventsWithinDateRange(calendarId, startDateTime, endDateTime) {
 	let eventsArray = [];
 	let params = {
@@ -168,5 +204,6 @@ function createNewCalendarAndGrantAccess(calendar) {
 module.exports.createNewCalendar = createNewCalendarAndGrantAccess;
 module.exports.insertEvent = insertEvent;
 module.exports.listSingleEventsWithinDateRange = listSingleEventsWithinDateRange;
+module.exports.deleteEventsWithinDateRange = deleteEventsWithinDateRange;
 
 

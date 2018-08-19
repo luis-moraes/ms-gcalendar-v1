@@ -9,7 +9,7 @@ var Calendar = mongoose.model('Calendar', {
   },
   ownerEmail: {
     type: String,
-    required: false,
+    required: true,
     minlength: 1,
     trim: true
   }
@@ -17,6 +17,12 @@ var Calendar = mongoose.model('Calendar', {
   gcalId: {
     type: String,
     required: false,
+    minlength: 1,
+    trim: true
+  },
+  clinicId: {
+    type: String,
+    required: true,
     minlength: 1,
     trim: true
   }
