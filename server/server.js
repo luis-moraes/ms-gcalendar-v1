@@ -9,6 +9,7 @@ var {mongoose} = require('./db/mongoose');
 var {Calendar} = require('./models/calendar');
 const gcal = require('./integration/gcalendar');
 
+var moment = require('moment-timezone');
 
 
 
@@ -51,12 +52,14 @@ app.delete('/calendar/:clinicId/event', (req, res) => {
 });
 
 
+
 app.get('/calendar/:clinicId/event', (req, res) => {
 
   
   var clinicId = req.params.clinicId;
   var startDateTime = req.query.startDateTime;
   var endDateTime = req.query.endDateTime;
+  var groupByDayTime = req.query.groupByDayTime;
 
   if (!clinicId  || !startDateTime || !endDateTime) {
     return res.status(404).send();
@@ -66,9 +69,31 @@ app.get('/calendar/:clinicId/event', (req, res) => {
     var gcalId = calendar.gcalId;
 
       gcal.listSingleEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
-        res.send(resp);
+        if(!groupByDayTime){
+          res.send(resp);
+        }else{
+          
+          let sDay = moment(startDateTime).clone();
+            let eDay = moment(endDateTime).clone();
+            
+            let days =[];
+            let d = sDay;
+            //fill calendar betwen start and end
+
+            while(d <= eDay){
+              let day = {
+                dateHour : d.tz("America/Sao_Paulo").format() ,
+                status : gcal.getFreeOrBusy(resp,d)
+              }
+              days.push(day);
+              d = d.clone().add(60,'m');
+            }
+          
+          res.send(days);
+        }
 
       }).catch((e) => {
+        console.log(e);
         res.status(500).send();
       });
     }).catch((e) => {
@@ -135,6 +160,7 @@ app.post('/calendar/:clinicId/event', (req, res) => {
   
   var cId = req.params.clinicId;
   var clientName = req.body.clientName;
+  var clientEmail = req.body.clientEmail
   var startDateTime = req.body.startDateTime;
   var endDateTime = req.body.endDateTime;
   var voucherCode = req.body.voucherCode;
@@ -146,7 +172,7 @@ app.post('/calendar/:clinicId/event', (req, res) => {
   Calendar.findOne({'clinicId' : cId}).then((calendar) => {
     var gcalId = calendar.gcalId;
 
-      gcal.insertEvent(gcalId,clientName,startDateTime,endDateTime,voucherCode).then(resp => {
+      gcal.insertEvent(gcalId,clientName,startDateTime,endDateTime,voucherCode,clientEmail).then(resp => {
         res.status(201).send();
 
       }).catch((e) => {

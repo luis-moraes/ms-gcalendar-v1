@@ -4,7 +4,21 @@ const {Calendar} = require('./../models/calendar');
 const CalendarAPI = require('node-google-calendar');
 let cal = new CalendarAPI(CONFIG); 
 const userId = CONFIG.userId;
+var moment = require('moment-timezone');
 
+
+function getFreeOrBusy(events,dateTime){
+  if(events && dateTime){
+
+    for (let i = 0; i < events.length; i++) {
+      if(moment(dateTime)>=moment(events[i].start) && moment(dateTime) <= moment(events[i].end)){
+        return 'busy';
+      }
+    }
+    
+  }
+  return 'free';
+}
 
 function deleteEventsWithinDateRange(calendarId, startDateTime, endDateTime) {
   let eventsArray = [];
@@ -54,12 +68,14 @@ function listSingleEventsWithinDateRange(calendarId, startDateTime, endDateTime)
 	return cal.Events.list(calendarId, params)
 		.then(json => {
 			for (let i = 0; i < json.length; i++) {
+        
 				let event = {
 					id: json[i].id,
 					summary: json[i].summary,
-					location: json[i].location,
-					start: json[i].start,
-					end: json[i].end,
+          location: json[i].location,
+          //convert dates to same TimeZone of starDateTime
+					start: moment(json[i].start.dateTime).tz("America/Sao_Paulo").format(),
+					end: moment(json[i].end.dateTime).tz("America/Sao_Paulo").format(),
 					status: json[i].status
 				};
 				eventsArray.push(event);
@@ -73,14 +89,14 @@ function listSingleEventsWithinDateRange(calendarId, startDateTime, endDateTime)
 }
 
 
-function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucherCode) {
+function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucherCode,clientEmail) {
   var description;
   if(voucherCode){
     description = `Reserva Sinaxys - Cliente: ${clientName} ** Voucher: ${voucherCode} **`;
   }else{
     description = `Reserva Sinaxys - Cliente: ${clientName}.`;
   }
-	let event = {
+  let event = {
 		'start': {
 			'dateTime': startDateTime
 		},
@@ -89,8 +105,29 @@ function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucher
 		},
 		'summary': `Reserva Sinaxys - Cliente: ${clientName}`,
 		'description': description,
-		'colorId': 1
+    'colorId': 1
 	};
+
+  if(clientEmail){
+     event = {
+      'start': {
+        'dateTime': startDateTime
+      },
+      'end': {
+        'dateTime': endDateTime
+      },
+      'summary': `Reserva Sinaxys - Cliente: ${clientName}`,
+      'description': description,
+      'colorId': 1,
+      "attendees": [
+        {
+          "email": clientEmail,
+          "displayName": clientName
+        }
+      ]
+    };
+  }
+	
 	let optionalQueryParams = {
 		sendNotifications: true
 	};
@@ -205,5 +242,5 @@ module.exports.createNewCalendar = createNewCalendarAndGrantAccess;
 module.exports.insertEvent = insertEvent;
 module.exports.listSingleEventsWithinDateRange = listSingleEventsWithinDateRange;
 module.exports.deleteEventsWithinDateRange = deleteEventsWithinDateRange;
-
+module.exports.getFreeOrBusy = getFreeOrBusy;
 
