@@ -35,17 +35,13 @@ app.delete('/calendar/:clinicId/event', (req, res) => {
   Calendar.findOne({'clinicId' : clinicId}).then((calendar) => {
     var gcalId = calendar.gcalId;
 
-      gcal.deleteEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
-        if(resp){
-          res.status(200).send();
-        }else{
-          res.status(400).send();
-        }
-
-      }).catch((e) => {
-        res.status(500).send();
-      });
+      gcal.deleteEventsWithinDateRange(gcalId,startDateTime,endDateTime);
+        
+          res.status(204).send();
+        
+      
     }).catch((e) => {
+      console.log(e)
       res.status(400).send();
     });
   

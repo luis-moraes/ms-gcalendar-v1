@@ -22,7 +22,7 @@ function getFreeOrBusy(events,dateTime){
 
 function deleteEventsWithinDateRange(calendarId, startDateTime, endDateTime) {
   let eventsArray = [];
-    listSingleEventsWithinDateRange(gcalId,startDateTime,endDateTime).then(resp => {
+    listSingleEventsWithinDateRange(calendarId,startDateTime,endDateTime).then(resp => {
       if(resp){
         for (let i = 0; i < resp.length; i++) {
           deleteEvent(calendarId,resp[i].id);
