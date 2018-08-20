@@ -11,7 +11,7 @@ function getFreeOrBusy(events,dateTime){
   if(events && dateTime){
 
     for (let i = 0; i < events.length; i++) {
-      if(moment(dateTime)>=moment(events[i].start) && moment(dateTime) <= moment(events[i].end)){
+      if(moment(dateTime)>=moment(events[i].start) && moment(dateTime) < moment(events[i].end)){
         return 'busy';
       }
     }
