@@ -127,6 +127,7 @@ app.get('/calendar/:clinicId', (req, res) => {
 app.post('/calendar', (req, res) => {
   var calendar = new Calendar({
     clinicName: req.body.clinicName,
+    location:   req.body.location,
     clinicId: req.body.clinicId,
     ownerEmail: req.body.ownerEmail
   });
@@ -167,8 +168,8 @@ app.post('/calendar/:clinicId/event', (req, res) => {
 
   Calendar.findOne({'clinicId' : cId}).then((calendar) => {
     var gcalId = calendar.gcalId;
-
-      gcal.insertEvent(gcalId,clientName,startDateTime,endDateTime,voucherCode,clientEmail).then(resp => {
+    var location = calendar.location;
+      gcal.insertEvent(gcalId, location, clientName,startDateTime,endDateTime,voucherCode,clientEmail).then(resp => {
         res.status(201).send();
 
       }).catch((e) => {

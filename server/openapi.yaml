@@ -1,0 +1,30 @@
+    swagger: "2.0"
+    info:
+      title: "Google Calendar API - Sinaxys"
+      description: "Integrate clinic calendar into google calendar events."
+      version: "1.0.0"
+    # This field will be replaced by the deploy_api.sh script.
+    host: "gcalenar.endpoints.ms-sinaxys.cloud.goog"
+    x-google-endpoints:
+    - name: "gcalenar.endpoints.ms-sinaxys.cloud.goog"
+      target: "35.192.70.44"
+    schemes:
+      - "https"
+    paths:
+      "/calendar":
+        get:
+          description: "Get google calendar address."
+          operationId: "getCalendar"
+          parameters:
+            -
+              name: clinicId
+              in: path
+              required: true
+              type: string
+          responses:
+            200:
+              description: "Success."
+              schema:
+                type: string
+            400:
+              description: "The clinicId code is invalid or missing."

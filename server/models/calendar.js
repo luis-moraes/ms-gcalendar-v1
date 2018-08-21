@@ -7,6 +7,12 @@ var Calendar = mongoose.model('Calendar', {
     minlength: 1,
     trim: true
   },
+  location: {
+    type: String,
+    required: false,
+    minlength: 1,
+    trim: true
+  },
   ownerEmail: {
     type: String,
     required: true,

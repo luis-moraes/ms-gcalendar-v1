@@ -89,7 +89,7 @@ function listSingleEventsWithinDateRange(calendarId, startDateTime, endDateTime)
 }
 
 
-function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucherCode,clientEmail) {
+function insertEvent(calendarId, location, clientName, startDateTime, endDateTime, voucherCode,clientEmail) {
   var description;
   if(voucherCode){
     description = `Reserva Sinaxys - Cliente: ${clientName} ** Voucher: ${voucherCode} **`;
@@ -126,6 +126,10 @@ function insertEvent(calendarId, clientName, startDateTime, endDateTime, voucher
         }
       ]
     };
+  }
+
+  if(location){
+    event.location = location;
   }
 	
 	let optionalQueryParams = {
